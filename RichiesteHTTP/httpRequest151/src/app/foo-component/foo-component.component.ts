@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {Foo} from './foo-component.model';
 @Component({
   selector: 'app-foo-component',
   templateUrl: './foo-component.component.html',
@@ -12,7 +13,8 @@ export class FooComponentComponent implements OnInit {
    data2: Object;
    loading: boolean;
    o :Observable<Object>;
-
+   fooData : Foo[];
+   oFoo : Observable<Foo[]>;
   constructor(public http: HttpClient) { }
 
   ngOnInit() {
@@ -41,11 +43,19 @@ export class FooComponentComponent implements OnInit {
          userId: 1
        })
      )
-     .subscribe(data2 => {
-       this.data2 = data2;
+     .subscribe(data => {
+       this.data = data;
        this.loading = false;
      });
+
  }
+ makeTypedRequest() : void
+ {
+   //oFoo : Observable<Foo[]>; va dichiarato tra gli attributi della classe
+   this.oFoo = this.http.get<Foo[]>('https://jsonplaceholder.typicode.com/posts');
+   this.oFoo.subscribe(data => {this.fooData = data;});
+ }
+
 
 
 
